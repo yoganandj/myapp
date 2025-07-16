@@ -1,0 +1,39 @@
+{
+    "ResponseMetadata": {
+        "RequestId": "c6bf7038-67f8-45ee-97a6-3ca3899ae904",
+        "HostId": "s9lzHYrFp76ZVxRcpX9+5cjAnEH2ROuNkd2BHfIa6UkFVdtjf5mKR3/eTPFvsiP/XV/VLi31234=",
+        "HTTPStatusCode": 200,
+        "HTTPHeaders": {
+            "server": "TwistedWeb/24.3.0",
+            "date": "Wed, 09 Jul 2025 17:49:21 GMT",
+            "content-type": "application/xml",
+            "content-length": "663",
+            "x-amz-request-id": "c6bf7038-67f8-45ee-97a6-3ca3899ae904",
+            "x-amz-id-2": "s9lzHYrFp76ZVxRcpX9+5cjAnEH2ROuNkd2BHfIa6UkFVdtjf5mKR3/eTPFvsiP/XV/VLi31234=",
+            "x-localstack": "true"
+        },
+        "RetryAttempts": 0
+    },
+    "IsTruncated": false,
+    "Marker": "",
+    "Contents": [
+        {
+            "Key": "hello.txt",
+            "LastModified": "2025-07-09T17:49:21Z",
+            "ETag": "6d104357707e6da89247313f0fc2a07f",
+            "ChecksumAlgorithm": [
+                "CRC64NVME"
+            ],
+            "Size": 22,
+            "StorageClass": "STANDARD",
+            "Owner": {
+                "DisplayName": "webfile",
+                "ID": "75aa57f09aa0c8caeab4f8c24e99d10f8e7faeebf76c078efc7c6caea54ba06a"
+            }
+        }
+    ],
+    "Name": "my-local-bucket",
+    "Prefix": "",
+    "MaxKeys": 1000,
+    "EncodingType": "url"
+}
