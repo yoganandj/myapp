@@ -50,10 +50,10 @@ pipeline {
                         usernameVariable: 'USERNAME',
                         passwordVariable: 'TOKEN'
                     )]) {
-                        bat """
-                            echo https://%USERNAME%:%TOKEN%@github.com > %USERPROFILE%\\.git-credentials
+                        sh '''
+                            echo https://${USERNAME}:${TOKEN}@github.com > ~/.git-credentials
                             git config --global credential.helper store
-                        """
+                        '''
                     }
                 }
             }
@@ -76,8 +76,8 @@ pipeline {
 
                     env.GIT_COMMIT = scmVars.GIT_COMMIT
                     env.GIT_BRANCH = scmVars.GIT_BRANCH
-                    env.GIT_AUTHOR_NAME = bat(
-                        script: 'git log -1 --pretty=format:"%an"',
+                    env.GIT_AUTHOR_NAME = sh(
+                        script: 'git log -1 --pretty=format:%an',
                         returnStdout: true
                     ).trim()
                 }
