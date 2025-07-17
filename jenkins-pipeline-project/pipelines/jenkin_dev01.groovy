@@ -42,19 +42,7 @@ pipeline {
     }
 
     stages {
-        stage('Install Make') {
-            steps {
-                script {
-                    {
-                        echo "install make started"
-                        sh '''
-                            sudo apt update
-                            sudo apt install make -y
-                        '''
-                    }
-                }
-            }
-        }
+        
         stage('Setup GitHub Credentials') {
             steps {
                 script {
