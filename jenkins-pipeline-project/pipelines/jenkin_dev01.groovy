@@ -100,7 +100,7 @@ pipeline {
     post {
         always {
             script {
-                def jenkinsNotify = load 'pipelines/notification_logic.groovy'
+                def jenkinsNotify = load 'jenkins-pipeline-project/pipelines/notification_logic.groovy'
                 jenkinsNotify.notifyBuild(currentBuild.result)
                 cleanWs()
             }
