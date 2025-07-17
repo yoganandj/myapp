@@ -87,11 +87,24 @@ pipeline {
         stage("Process Stacks") {
             steps {
                 script {
-                    def jenkinsNotify = load 'jenkins-pipeline-project/pipelines/notification_logic.groovy'
-                    jenkinsNotify.notifyBuild('STARTED')
+                    try {
+                        def jenkinsNotify = load "${WORKSPACE}/jenkins-pipeline-project/pipelines/notification_logic.groovy"
+                        if (jenkinsNotify) {
+                            jenkinsNotify.notifyBuild('STARTED')
+                        } else {
+                            echo "Warning: notification_logic.groovy loaded but returned null"
+                        }
 
-                    def jenkinsDeploy = load 'jenkins-pipeline-project/pipelines/deployment_logic.groovy'
-                    jenkinsDeploy.execute_deploy(ordered_stacks)
+                        def jenkinsDeploy = load "${WORKSPACE}/jenkins-pipeline-project/pipelines/deployment_logic.groovy"
+                        if (jenkinsDeploy) {
+                            jenkinsDeploy.execute_deploy(ordered_stacks)
+                        } else {
+                            error "Failed to load deployment_logic.groovy"
+                        }
+                    } catch (Exception e) {
+                        echo "Error loading groovy files: ${e.message}"
+                        currentBuild.result = 'FAILURE'
+                    }
                 }
             }
         }
@@ -100,9 +113,16 @@ pipeline {
     post {
         always {
             script {
-                def jenkinsNotify = load 'jenkins-pipeline-project/pipelines/notification_logic.groovy'
-                jenkinsNotify.notifyBuild(currentBuild.result)
-                cleanWs()
+                try {
+                    def jenkinsNotify = load "${WORKSPACE}/jenkins-pipeline-project/pipelines/notification_logic.groovy"
+                    if (jenkinsNotify) {
+                        jenkinsNotify.notifyBuild(currentBuild.result ?: 'UNKNOWN')
+                    }
+                } catch (Exception e) {
+                    echo "Failed to send notifications: ${e.message}"
+                } finally {
+                    cleanWs()
+                }
             }
         }
     }
