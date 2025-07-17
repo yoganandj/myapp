@@ -33,7 +33,7 @@ def build_facts() {
     facts['job_name'] = env.JOB_NAME ?: 'unknown'
     return facts
 }
-def notify_build(String status) {
+def notifyBuild(String status) {
     echo "notification_logic.groovy started"
     def subject = "Latest status of ${env.JOB_NAME} build #${env.BUILD_NUMBER}"
     def facts = build_facts()
