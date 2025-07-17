@@ -25,6 +25,7 @@ def execute_deploy(List ordered_stacks) {
         if (params.ACTION == "DEPLOY") {
             ordered_stacks.each { stack -> 
                 if (fileExists("src/${stack}/jenkins.groovy")) {
+                    echo "deployment logic checking file exist -- jenkins.groovy"
                     def jenkinsScript = load "src/${stack}/jenkins.groovy"
                     jenkinsScript.checkUnitTests(getCurrent())
                 }
