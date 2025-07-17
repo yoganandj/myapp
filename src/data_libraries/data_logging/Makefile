@@ -9,7 +9,7 @@ install:
 	pip3 install -e .[test]
 
 check: setup-build
-	$env:AWS_DEFAULT_REGION="us-east-2"
+	export AWS_DEFAULT_REGION="us-east-2"
 	tox
 
 lint: setup-build
