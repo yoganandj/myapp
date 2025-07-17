@@ -17,6 +17,7 @@ def color_status(String status) {
 }
 
 def notify(String color, String subject, String status, List facts) {
+    echo "notification_logic.groovy notify()"
     echo "Notification: ${subject}"
     echo "Status: ${status}"    
     echo "Color: ${color}"
@@ -33,6 +34,7 @@ def build_facts() {
     return facts
 }
 def notify_build(String status) {
+    echo "notification_logic.groovy started"
     def subject = "Latest status of ${env.JOB_NAME} build #${env.BUILD_NUMBER}"
     def facts = build_facts()
     def color = color_status(status)
