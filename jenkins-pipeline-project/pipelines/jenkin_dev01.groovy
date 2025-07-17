@@ -87,10 +87,10 @@ pipeline {
         stage("Process Stacks") {
             steps {
                 script {
-                    def jenkinsNotify = load 'pipelines/notification_logic.groovy'
+                    def jenkinsNotify = load 'jenkins-pipeline-project/pipelines/notification_logic.groovy'
                     jenkinsNotify.notifyBuild('STARTED')
 
-                    def jenkinsDeploy = load 'pipelines/deployment_logic.groovy'
+                    def jenkinsDeploy = load 'jenkins-pipeline-project/pipelines/deployment_logic.groovy'
                     jenkinsDeploy.execute_deploy(ordered_stacks)
                 }
             }
