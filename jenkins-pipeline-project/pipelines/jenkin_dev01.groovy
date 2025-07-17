@@ -7,7 +7,7 @@ def ordered_stacks = [
 
 pipeline {
     agent any
-
+    def dynamic_choices = ['ALL'] + ordered_stacks
     parameters {
         choice(name: 'ACTION', choices: ['DEPLOY', 'NO_DEPLOY'], description: 'Select the action to perform')
 
@@ -18,7 +18,7 @@ pipeline {
         )
         choice(
             name: 'STACK',
-            choices: ordered_stacks.join('ALL'),
+            choices: dynamic_choices,
             description: 'myapp stack to deploy'
         )
         booleanParam(
