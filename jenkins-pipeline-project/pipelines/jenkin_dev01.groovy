@@ -4,12 +4,7 @@ def ordered_stacks = [
 ]
 
 pipeline {
-    agent {
-        docker {
-            image 'ubuntu:22.04' // or 'gcc' or 'buildpack-deps'
-        }
-    }
-
+    agent any
 
     parameters {
         choice(
@@ -47,14 +42,6 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
-            steps {
-                sh '''
-                apt update && apt install -y make
-                make
-                '''
-            }
-        }
         stage('Setup GitHub Credentials') {
             steps {
                 script {
