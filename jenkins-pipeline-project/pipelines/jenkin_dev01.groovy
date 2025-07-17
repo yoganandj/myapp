@@ -47,13 +47,11 @@ pipeline {
         stage('Install Make') {
             steps {
                 script {
-                    {
-                        echo "install make started"
-                        sh '''
-                            sudo apt update
-                            sudo apt install make -y
-                        '''
-                    }
+                    echo "install make started"
+                    sh '''
+                        sudo apt update
+                        sudo apt install make -y
+                    '''
                 }
             }
         }
