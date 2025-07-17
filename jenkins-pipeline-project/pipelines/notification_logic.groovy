@@ -44,3 +44,4 @@ def notify_build(String status) {
 def get_parameter_str(){
     return "BRANCH: ${env.BRANCH},\nAWS_ACCOUNT: ${env.AWS_ACCOUNT}, \nSTACK: ${env.STACK}, \nENVIRONMENT: ${env.ENVIRONMENT}, \nAWS_REGION: ${env.AWS_REGION}, \nAWS_PROFILE: ${env.AWS_PROFILE}, \nGIT_COMMIT: ${env.GIT_COMMIT}, \nGIT_BRANCH: ${env.GIT_BRANCH}, \nGIT_URL: ${env.GIT_URL}"
 }
+return this;
