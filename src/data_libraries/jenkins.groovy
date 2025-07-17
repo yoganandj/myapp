@@ -10,7 +10,7 @@ sonarTestReport = "data_logging/reports/test.xml"
 
 def checkUnitTests(Map stack) {
     echo "stack name : ${stack.envName}"
-    stage("Check UnitTests-Linter ${stack.envName}") {
+    stage("Check UnitTests-Linter ${current_stack}") {
         dir("src/${current_stack}") {
             sh """
                 python3 -m venv venv
@@ -18,7 +18,7 @@ def checkUnitTests(Map stack) {
                 make check
             """
         }
-        echo "end checkUnitTests : ${stack.envName}"
+        echo "end : ${current_stack}"
     }
 }
 
