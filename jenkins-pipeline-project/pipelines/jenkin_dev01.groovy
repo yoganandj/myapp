@@ -1,24 +1,25 @@
-
 def ordered_stacks = [
     'data_libraries',
     'data_delivery'
 ]
 
-
 pipeline {
     agent any
-    def dynamic_choices = ['ALL'] + ordered_stacks
-    parameters {
-        choice(name: 'ACTION', choices: ['DEPLOY', 'NO_DEPLOY'], description: 'Select the action to perform')
 
-        get_parameter_str(
+    parameters {
+        choice(
+            name: 'ACTION',
+            choices: ['DEPLOY', 'NO_DEPLOY'],
+            description: 'Select the action to perform'
+        )
+        string(
             name: 'BRANCH', 
             defaultValue: 'main', 
             description: 'Branch to deploy from'
         )
         choice(
             name: 'STACK',
-            choices: dynamic_choices,
+            choices: ['ALL', 'data_libraries', 'data_delivery'],
             description: 'myapp stack to deploy'
         )
         booleanParam(
@@ -28,7 +29,8 @@ pipeline {
         )
         string(
             name: 'GIT_COMMIT_HASH',
-            defaultValue: 'DO NOT SET'
+            defaultValue: 'DO NOT SET',
+            description: 'Git commit hash to deploy'
         )
     }
 
@@ -40,46 +42,57 @@ pipeline {
     }
 
     stages {
-        stage('github Credentials') {
+        stage('Setup GitHub Credentials') {
             steps {
-                withCredentials([usernamePassword(credentialsId: "${GIT_CREDENTIALS_IN_JENKINS}", usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
-                    sh "echo \"https://${USERNAME}:${TOKEN}@github.com\" > ~/.git-credentials"
-                    sh "git config --global credential.helper store --file ~/.git-credentials" 
+                script {
+                    withCredentials([usernamePassword(
+                        credentialsId: "${GIT_CREDENTIALS_IN_JENKINS}",
+                        usernameVariable: 'USERNAME',
+                        passwordVariable: 'TOKEN'
+                    )]) {
+                        bat """
+                            echo https://%USERNAME%:%TOKEN%@github.com > %USERPROFILE%\\.git-credentials
+                            git config --global credential.helper store
+                        """
+                    }
                 }
-                // Add your build steps for data libraries here
             }
         }
+
         stage('Git Checkout') {
             steps {
                 script {
-                    def scmVars = checkout([$class: 'GitSCM', 
-                        branches: [[name: "${params.BRANCH}"]],
+                    def scmVars = checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: "*/${params.BRANCH}"]],
                         doGenerateSubmoduleConfigurations: false,
-                        extension: [],
+                        extensions: [],
                         submoduleCfg: [],
-                        url: "${GITHUB_URL}",
-                        userRemoteConfigs: [[url: "${GITHUB_URL}", credentialsId: "${GIT_CREDENTIALS_IN_JENKINS}"]]
-                    ]
-                    )
-                }
+                        userRemoteConfigs: [[
+                            url: "${GITHUB_URL}",
+                            credentialsId: "${GIT_CREDENTIALS_IN_JENKINS}"
+                        ]]
+                    ])
 
-                env.GIT_COMMIT = scmVars.GIT_COMMIT
-                env.GIT_BRANCH = scmVars.GIT_BRANCH
-                env.GIT_AUTHOR_NAME = sh(returnStdout: true, script: "git log -1 --pretty=format:'%an").trim()
-                echo 'Delivering Data...'
-                // Add your build steps for data delivery here
+                    env.GIT_COMMIT = scmVars.GIT_COMMIT
+                    env.GIT_BRANCH = scmVars.GIT_BRANCH
+                    env.GIT_AUTHOR_NAME = bat(
+                        script: 'git log -1 --pretty=format:"%an"',
+                        returnStdout: true
+                    ).trim()
+                }
             }
         }
-        // Add additional stages as necessary
-    }
-    stage("Load Logic Files") {
-        steps {
-            script {
-                def jenkinsNotify = load 'pipelines/notification_logic.groovy'
-                jenkinsNotify.notifyBuild("Starting")
 
-                def jenkinsDeploy = load 'pipelines/deployment_logic.groovy'
-                jenkinsDeploy.execute_deploy(ordered_stacks)
+        stage("Process Stacks") {
+            steps {
+                script {
+                    def jenkinsNotify = load 'pipelines/notification_logic.groovy'
+                    jenkinsNotify.notifyBuild('STARTED')
+
+                    def jenkinsDeploy = load 'pipelines/deployment_logic.groovy'
+                    jenkinsDeploy.execute_deploy(ordered_stacks)
+                }
             }
         }
     }
@@ -88,7 +101,8 @@ pipeline {
         always {
             script {
                 def jenkinsNotify = load 'pipelines/notification_logic.groovy'
-                jenkinsNotify.notifyBuild(currentBuild.results)
+                jenkinsNotify.notifyBuild(currentBuild.result)
+                cleanWs()
             }
         }
     }
