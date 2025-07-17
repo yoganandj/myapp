@@ -38,7 +38,7 @@ pipeline {
         AWS_ACCOUNT = 'dev01'
         AWS_CREDENTIALS_IN_JENKINS = "${AWS_ACCOUNT}-myapp-aws"
         GITHUB_URL = "https://github.com/yoganandj/myapp.git"
-        GIT_CREDENTIALS_IN_JENKINS = 'GithubTokenForJenkinsMyApp'
+        GIT_CREDENTIALS_IN_JENKINS = 'gith-jenkins-credentials'
     }
 
     stages {
