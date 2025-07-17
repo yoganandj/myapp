@@ -11,7 +11,11 @@ sonarTestReport = "data_logging/reports/test.xml"
 def checkUnitTests(Map stack) {
     stage("Check UnitTests-Linter ${stack.envName}") {
         dir("src/${current_stack}") {
-            sh "make check"
+            sh """
+                python3 -m venv venv
+                . venv/bin/activate
+                make check
+            """
         }
     }
 }
