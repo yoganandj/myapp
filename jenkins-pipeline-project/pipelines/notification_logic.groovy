@@ -32,13 +32,13 @@ def build_facts() {
     facts['job_name'] = env.JOB_NAME ?: 'unknown'
     return facts
 }
-def notify_build(String status, String message) {
+def notify_build(String status) {
     def subject = "Latest status of ${env.JOB_NAME} build #${env.BUILD_NUMBER}"
     def facts = build_facts()
-    color = color_status(status)
+    def color = color_status(status)
     notify(color, subject, status, facts)
 }
 
-get get_parameter_str(){
-    return "BRANCH:" ${BRANCH},\nAWS_ACCOUNT: ${nAWS_ACCOUNT}, \nSTACK: ${STACK}, \nENVIRONMENT: ${ENVIRONMENT}, \nAWS_REGION: ${AWS_REGION}, \nAWS_PROFILE: ${AWS_PROFILE}, \nGIT_COMMIT: ${GIT_COMMIT}, \nGIT_BRANCH: ${GIT_BRANCH}, \nGIT_URL: ${GIT_URL}"
+def get_parameter_str(){
+    return "BRANCH: ${env.BRANCH},\nAWS_ACCOUNT: ${env.AWS_ACCOUNT}, \nSTACK: ${env.STACK}, \nENVIRONMENT: ${env.ENVIRONMENT}, \nAWS_REGION: ${env.AWS_REGION}, \nAWS_PROFILE: ${env.AWS_PROFILE}, \nGIT_COMMIT: ${env.GIT_COMMIT}, \nGIT_BRANCH: ${env.GIT_BRANCH}, \nGIT_URL: ${env.GIT_URL}"
 }
