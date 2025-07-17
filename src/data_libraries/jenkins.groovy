@@ -8,9 +8,9 @@ sonarTestSource = "data_logging/test"
 sonarTestCoverage = "data_logging/reports/coverage.xml"
 sonarTestReport = "data_logging/reports/test.xml"
 
-def checkUnitTests(String stack) {
-    stage("Check UnitTests-Linter ${stack}") {
-        dir("src/${stack}") {
+def checkUnitTests(Map stack) {
+    stage("Check UnitTests-Linter ${stack.envName}") {
+        dir("src/${current_stack}") {
             sh "make check"
         }
     }
