@@ -10,12 +10,8 @@ sonarTestReport = "data_logging/reports/test.xml"
 
 def checkUnitTests(Map stack) {
     stage("Check UnitTests-Linter ${stack.envName}") {
-        dir("src/${current_stack}/data_logging") {
-            sh """
-                pip3 install --q "tox>4"
-                export AWS_DEFAULT_REGION="us-east-2"
-                tox
-            """
+        dir("src/${current_stack}") {
+            sh "make check"
         }
     }
 }
