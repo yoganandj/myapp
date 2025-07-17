@@ -38,7 +38,7 @@ def notifyBuild(String status) {
     def subject = "Latest status of ${env.JOB_NAME} build #${env.BUILD_NUMBER}"
     def facts = build_facts()
     def color = color_status(status)
-    notify(color, subject, status, facts)
+    this.notify(color, subject, status, facts)
 }
 
 def get_parameter_str(){
