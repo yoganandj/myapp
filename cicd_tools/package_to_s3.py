@@ -26,7 +26,7 @@ class ObjectConfig:
     stack_name: str
     dir_path: Optional[Path]
     name: str
-    filter: str
+    filters: str
     include: Optional[str]
     no_deps: bool
     use_setup_py: bool
@@ -42,7 +42,7 @@ class ObjectConfig:
     @property
     def included_entries(self) -> Iterator[Tuple[Path, List[Path]]]:
         for dir_ in (Path(x) for x in self.include.split(',') if Path(x).is_dir()):
-            files = list({f for f in dir_.rglob('*') if "__pycache__" notin str(f) and not is_hidden_file(f)})
+            files = list({f for f in dir_.rglob('*') if "__pycache__" not in str(f) and not is_hidden_file(f)})
             yield dir_, files
 
 
