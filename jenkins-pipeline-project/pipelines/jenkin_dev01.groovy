@@ -42,8 +42,6 @@ pipeline {
     }
 
     stages {
-        
-        stages {
         stage('Install Make') {
             steps {
                 script {
@@ -138,6 +136,5 @@ pipeline {
                 }
             }
         }
-    }
     }
 }
