@@ -9,6 +9,7 @@ sonarTestCoverage = "data_logging/reports/coverage.xml"
 sonarTestReport = "data_logging/reports/test.xml"
 
 def checkUnitTests(Map stack) {
+    echo "stack name : ${stack.envName}"
     stage("Check UnitTests-Linter ${stack.envName}") {
         dir("src/${current_stack}") {
             sh """
@@ -17,6 +18,7 @@ def checkUnitTests(Map stack) {
                 make check
             """
         }
+        echo "end checkUnitTests : ${stack.envName}"
     }
 }
 
