@@ -31,6 +31,7 @@ def checkUnitTestsDataLibraries(String stack) {
                 python3 -m venv venv
                 . venv/bin/activate
                 make check
+                python3 --version
                 python3 -m pytest tests/ --cov=${stack} --cov-report=term-missing -v
                 
             """
