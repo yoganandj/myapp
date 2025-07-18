@@ -16,11 +16,35 @@ def checkUnitTests(Map stack) {
                 python3 -m venv venv
                 . venv/bin/activate
                 make check
+
             """
         }
         echo "end : ${current_stack}"
     }
 }
 
+def checkUnitTestsDataLibraries(String stack) {
+    echo "stack name : ${stack}"
+    stage("Check UnitTests-Linter ${stack}") {
+        dir("src/data_libraries/${stack}") {
+            sh """
+                python3 -m venv venv
+                . venv/bin/activate
+                make check
+                python3 -m pytest tests/ --cov=${stack} --cov-report=term-missing -v
+                
+            """
+        }
+        echo "end checkUnitTestsDataLibraries for : ${stack}"
+    }
+}
+
+
+
+
+// after merge
+def checkAfterMerge(def context) {
+  //  check
+}
 
 return this

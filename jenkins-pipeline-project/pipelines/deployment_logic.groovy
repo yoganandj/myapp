@@ -27,7 +27,9 @@ def execute_deploy(List ordered_stacks) {
                 if (fileExists("src/${stack}/jenkins.groovy")) {
                     echo "deployment logic checking file exist -- jenkins.groovy"
                     def jenkinsScript = load "src/${stack}/jenkins.groovy"
-                    jenkinsScript.checkUnitTests(getCurrent())
+                 //   jenkinsScript.checkUnitTests(stack)
+                    jenkinsScript.checkUnitTestsDataLibraries("data_logging")
+                    jenkinsScript.checkUnitTestsDataLibraries("data_utils")
                 }
 
                 // terraform
@@ -41,7 +43,7 @@ def execute_deploy(List ordered_stacks) {
                 // resources initialization
                 if (fileExists("src/${stack}/jenkins.groovy")) {
                     def jenkinsScript = load "src/${stack}/jenkins.groovy"
-                    jenkinsScript.initResources(getCurrent())
+                  //  jenkinsScript.initResources(getCurrent())
                 } else {
                     echo "No resources initialization script found for stack: ${stack}"
                 }
